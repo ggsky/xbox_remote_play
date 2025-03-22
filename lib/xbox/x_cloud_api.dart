@@ -1,5 +1,4 @@
 import "dart:convert";
-import "package:flutter/foundation.dart";
 import "package:http/http.dart" as http;
 
 class XCloundApi {
@@ -33,7 +32,7 @@ class XCloundApi {
         "https://uks.gssv-play-prodxhome.xboxlive.com/v6/servers/home");
     var response = await http.get(uri, headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer ${this.token}",
+      "Authorization": "Bearer $token",
     });
 
     if (response.statusCode == 200) {
@@ -94,7 +93,7 @@ class XCloundApi {
             "https://uks.gssv-play-prodxhome.xboxlive.com/v5/sessions/home/play"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + this.token,
+          "Authorization": "Bearer $token",
           "X-MS-Device-Info": json.encode(deviceInfo),
         },
         body: json.encode(body));
@@ -105,7 +104,7 @@ class XCloundApi {
       var body = json.decode(response.body);
       var provisioningReady = await isProvisioningReady(body["sessionPath"]);
       if (provisioningReady != null) {
-        this.sessionPath = body["sessionPath"];
+        sessionPath = body["sessionPath"];
         if (provisioningReady["state"] == "ReadyToConnect") {
           if (await xcloudAuth()) {
             return await isProvisioningReady(body["sessionPath"]);
@@ -120,10 +119,10 @@ class XCloundApi {
 
   Future isProvisioningReady(String url, {int retries = 0}) async {
     var response = await http.get(
-        Uri.parse("https://uks.gssv-play-prodxhome.xboxlive.com/${url}/state"),
+        Uri.parse("https://uks.gssv-play-prodxhome.xboxlive.com/$url/state"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + this.token,
+          "Authorization": "Bearer $token",
         });
 
     if (response.statusCode == 200) {
@@ -141,7 +140,7 @@ class XCloundApi {
           return {"state": "timeout"};
         }
         //debugPrint("XCloudApi isProvisioningReady() waiting...");
-        await Future.delayed(Duration(milliseconds: 1000));
+        await Future.delayed(const Duration(milliseconds: 1000));
         return await isProvisioningReady(url, retries: ++retries);
       }
     } else {
@@ -150,7 +149,7 @@ class XCloundApi {
         return {"state": "timeout"};
       }
       //debugPrint("XCloudApi isProvisioningReady() waiting...");
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
       return await isProvisioningReady(url, retries: ++retries);
     }
   }
@@ -158,10 +157,10 @@ class XCloundApi {
   isExchangeReady(String url, {int retries = 0}) async {
     var response = await http.get(
         Uri.parse(
-            "https://uks.gssv-play-prodxhome.xboxlive.com/${this.sessionPath}/${url}"),
+            "https://uks.gssv-play-prodxhome.xboxlive.com/$sessionPath/$url"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + this.token,
+          "Authorization": "Bearer $token",
         });
 
     if (response.statusCode == 200) {
@@ -184,7 +183,7 @@ class XCloundApi {
         return null;
       }
       //debugPrint("XCloudApi isExchangeReady() waiting...");
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
       return await isExchangeReady(url, retries: ++retries);
     }
   }
@@ -210,17 +209,17 @@ class XCloundApi {
 
     var response = await http.post(
         Uri.parse(
-            "https://uks.gssv-play-prodxhome.xboxlive.com/${this.sessionPath}/sdp"),
+            "https://uks.gssv-play-prodxhome.xboxlive.com/$sessionPath/sdp"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + this.token,
+          "Authorization": "Bearer $token",
         },
         body: json.encode(body));
 
     //debugPrint("XCloudApi sendSdp() Status: ${response.statusCode}");
     if (response.statusCode == 202) {
       //debugPrint("XCloudApi sendSdp() body: ${response.body}");
-      var exchangeReady = await this.isExchangeReady("sdp");
+      var exchangeReady = await isExchangeReady("sdp");
       if (exchangeReady != null) {
         //debugPrint("Loop done? resolve now...");
         return exchangeReady["exchangeResponse"];
@@ -234,17 +233,17 @@ class XCloundApi {
 
     var response = await http.post(
         Uri.parse(
-            "https://uks.gssv-play-prodxhome.xboxlive.com/${this.sessionPath}/ice"),
+            "https://uks.gssv-play-prodxhome.xboxlive.com/$sessionPath/ice"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + this.token,
+          "Authorization": "Bearer $token",
         },
         body: json.encode(body));
 
     //debugPrint("XCloudApi sendIce() Status: ${response.statusCode}");
     if (response.statusCode == 202) {
       //debugPrint("XCloudApi sendIce() body: ${response.body}");
-      var exchangeReady = await this.isExchangeReady("ice");
+      var exchangeReady = await isExchangeReady("ice");
       if (exchangeReady != null) {
         //debugPrint("Loop done? resolve now...");
         return exchangeReady["exchangeResponse"];
@@ -254,14 +253,14 @@ class XCloundApi {
   }
 
   xcloudAuth() async {
-    var body = {"userToken": this.WlToken};
+    var body = {"userToken": WlToken};
 
     var response = await http.post(
         Uri.parse(
-            "https://uks.gssv-play-prodxhome.xboxlive.com/${this.sessionPath}/connect"),
+            "https://uks.gssv-play-prodxhome.xboxlive.com/$sessionPath/connect"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + this.token,
+          "Authorization": "Bearer $token",
         },
         body: json.encode(body));
 
@@ -277,10 +276,10 @@ class XCloundApi {
     try {
       var response = await http.post(
           Uri.parse(
-              "https://uks.gssv-play-prodxhome.xboxlive.com/${this.sessionPath}/keepalive"),
+              "https://uks.gssv-play-prodxhome.xboxlive.com/$sessionPath/keepalive"),
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + this.token,
+            "Authorization": "Bearer $token",
           },
           body: json.encode(""));
 

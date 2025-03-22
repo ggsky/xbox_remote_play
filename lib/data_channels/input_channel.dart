@@ -1,12 +1,9 @@
 import 'dart:collection';
-import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:xbox_remote_play/key_code.dart';
-import 'package:xbox_remote_play/xbox/input_key.dart';
 
 import 'channel_base.dart';
 import "../xbox/input_frame.dart";
@@ -147,28 +144,28 @@ class InputChannel extends ChannelBase {
   InputFrame updateLeftStickAxis(InputFrame inputState) {
     var x = 0;
     var y = 0;
-    if (this.aState && this.wState) {
+    if (aState && wState) {
       x = -24575;
       y = 24575;
-    } else if (this.aState && this.sState) {
+    } else if (aState && sState) {
       x = -24575;
       y = -24575;
-    } else if (this.wState && this.dState) {
+    } else if (wState && dState) {
       x = 24575;
       y = 24575;
-    } else if (this.dState && this.sState) {
+    } else if (dState && sState) {
       x = 24575;
       y = -24575;
-    } else if (this.aState) {
+    } else if (aState) {
       x = -32767;
       y = 0;
-    } else if (this.wState) {
+    } else if (wState) {
       x = 0;
       y = 32767;
-    } else if (this.dState) {
+    } else if (dState) {
       x = 32767;
       y = 0;
-    } else if (this.sState) {
+    } else if (sState) {
       y = -32767;
     }
 
@@ -181,29 +178,29 @@ class InputChannel extends ChannelBase {
   InputFrame updateRightStickAxis(InputFrame inputState) {
     var x = 0;
     var y = 0;
-    if (this.jState && this.iState) {
+    if (jState && iState) {
       x = -24575;
       y = 24575;
-    } else if (this.jState && this.kState) {
+    } else if (jState && kState) {
       x = -24575;
       y = -24575;
-    } else if (this.iState && this.lState) {
+    } else if (iState && lState) {
       x = 24575;
       y = 24575;
-    } else if (this.lState && this.kState) {
+    } else if (lState && kState) {
       x = 24575;
       y = -24575;
-    } else if (this.jState) {
+    } else if (jState) {
       x = -32767;
       y = 0;
-    } else if (this.iState) {
+    } else if (iState) {
       inputState.leftStickXAxis = 0;
       x = 0;
       y = 32767;
-    } else if (this.lState) {
+    } else if (lState) {
       x = 32767;
       y = 0;
-    } else if (this.kState) {
+    } else if (kState) {
       x = 0;
       y = -32767;
     }
@@ -223,26 +220,26 @@ class InputChannel extends ChannelBase {
     startReport.setFloat64(
         5, DateTime.now().millisecondsSinceEpoch.toDouble(), Endian.little);
     startReport.setUint8(13, 0);
-    this.sendData(startReport.buffer.asUint8List());
+    sendData(startReport.buffer.asUint8List());
 
-    var receiver = this.client.transceiver.receiver;
+    var receiver = client.transceiver.receiver;
     var lastTimestamp = 0.0;
 
     Future(() async {
       while (true) {
         await Future.delayed(const Duration(milliseconds: 33));
         var frameInfos = await receiver.getStats();
-        var _frameInfos = Queue<StatsReport>();
+        var frameInfos0 = Queue<StatsReport>();
         for (var info in frameInfos) {
           if (info.type == "track" && info.timestamp > lastTimestamp) {
             lastTimestamp = info.timestamp;
-            _frameInfos.add(info);
+            frameInfos0.add(info);
           }
         }
-        var packet = _createPacket(_frameInfos);
-        await this.sendData(packet);
+        var packet = _createPacket(frameInfos0);
+        await sendData(packet);
         frameInfos.clear();
-        _frameInfos.clear();
+        frameInfos0.clear();
       }
     });
 
@@ -271,12 +268,12 @@ class InputChannel extends ChannelBase {
     var reportType = 0;
     var totalSize = 13;
 
-    if (frameInfos.length > 0) {
+    if (frameInfos.isNotEmpty) {
       reportType |= 1;
       totalSize += 1 + 28 * frameInfos.length;
     }
 
-    if (inputStates.length > 0) {
+    if (inputStates.isNotEmpty) {
       reportType |= 2;
       totalSize += 1 + (23 * inputStates.length);
     }
@@ -289,13 +286,13 @@ class InputChannel extends ChannelBase {
 
     var offset = 13;
 
-    if (frameInfos.length > 0) {
+    if (frameInfos.isNotEmpty) {
       metadataReport.setUint8(offset, 1);
       offset++;
 
-      for (; frameInfos.length > 0;) {
+      for (; frameInfos.isNotEmpty;) {
         var info = frameInfos.removeFirst();
-        var serverDataKey = (info.timestamp / 1000).toInt();
+        var serverDataKey = info.timestamp ~/ 1000;
         var firstFramePacketArrivalTimeMs =
             info.values["framesReceived"].toInt() + serverDataKey;
         var frameSubmittedTimeMs = firstFramePacketArrivalTimeMs;
@@ -319,11 +316,11 @@ class InputChannel extends ChannelBase {
       }
     }
 
-    if (inputStates.length > 0) {
+    if (inputStates.isNotEmpty) {
       metadataReport.setUint8(offset, inputStates.length);
       offset++;
 
-      for (; inputStates.length > 0;) {
+      for (; inputStates.isNotEmpty;) {
         metadataReport.setUint8(offset, 0);
         offset++;
 
@@ -411,7 +408,7 @@ class InputChannel extends ChannelBase {
 
   @override
   void onClose() {
-    this.isRunning = false;
+    isRunning = false;
     super.onClose();
   }
 }

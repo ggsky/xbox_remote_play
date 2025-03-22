@@ -1,5 +1,4 @@
 import "dart:convert";
-import "dart:io";
 import "package:flutter_webrtc/flutter_webrtc.dart";
 import 'package:xbox_remote_play/config.dart';
 import "package:xbox_remote_play/data_channels/control_channel.dart";
@@ -22,7 +21,7 @@ class MessageChannel extends ChannelBase {
       "id": "f9c5f412-0e69-4ede-8e62-92c7f5358c56",
       "cv": "",
     };
-    this.sendMessage(json.encode(handshake));
+    sendMessage(json.encode(handshake));
   }
 
   @override
@@ -31,8 +30,8 @@ class MessageChannel extends ChannelBase {
     Map<String, dynamic> message = json.decode(value.text);
     if (message["type"] == "HandshakeAck") {
 
-      (this.client.getLocalChannel("control") as ControlChannel).start();
-      (this.client.getLocalChannel("input") as InputChannel).start();
+      (client.getLocalChannel("control") as ControlChannel).start();
+      (client.getLocalChannel("input") as InputChannel).start();
 
       var uiConfig = {
         "type": "Message",
@@ -44,7 +43,7 @@ class MessageChannel extends ChannelBase {
         "target": "/streaming/systemUi/configuration",
         "cv": ""
       };
-      this.sendMessage(json.encode(uiConfig));
+      sendMessage(json.encode(uiConfig));
 
       var clientConfig = {
         "type": "Message",
@@ -55,7 +54,7 @@ class MessageChannel extends ChannelBase {
         "target": "/streaming/properties/clientappinstallidchanged",
         "cv": ""
       };
-      this.sendMessage(json.encode(clientConfig));
+      sendMessage(json.encode(clientConfig));
 
       var orientationConfig = {
         "type": "Message",
@@ -66,7 +65,7 @@ class MessageChannel extends ChannelBase {
         "target": "/streaming/characteristics/orientationchanged",
         "cv": ""
       };
-      this.sendMessage(json.encode(orientationConfig));
+      sendMessage(json.encode(orientationConfig));
 
       var touchConfig = {
         "type": "Message",
@@ -77,7 +76,7 @@ class MessageChannel extends ChannelBase {
         "target": "/streaming/characteristics/touchinputenabledchanged",
         "cv": ""
       };
-      this.sendMessage(json.encode(touchConfig));
+      sendMessage(json.encode(touchConfig));
 
       var deviceConfig = {
         "type": "Message",
@@ -86,7 +85,7 @@ class MessageChannel extends ChannelBase {
         "target": "/streaming/characteristics/clientdevicecapabilities",
         "cv": ""
       };
-      this.sendMessage(json.encode(deviceConfig));
+      sendMessage(json.encode(deviceConfig));
 
       var dimensionsConfig = {
         "type": "Message",
@@ -105,7 +104,7 @@ class MessageChannel extends ChannelBase {
         "target": "/streaming/characteristics/dimensionschanged",
         "cv": ""
       };
-      this.sendMessage(json.encode(dimensionsConfig));
+      sendMessage(json.encode(dimensionsConfig));
     }
   }
 

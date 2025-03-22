@@ -212,7 +212,7 @@ class InputFrame {
   }
 
   InputFrame DeepCopy() {
-    var value = new InputFrame();
+    var value = InputFrame();
     value.a = a;
     value.b = b;
     value.x = x;

@@ -38,14 +38,14 @@ class XCloudClient {
     try {
       WebRTC.initialize(options: {"logLevel": "error"});
 
-      this.pc = await createPeerConnection({
+      pc = await createPeerConnection({
         "iceServers": [
           {"url": "stun:stun.l.google.com:19302"},
           {"url": "stun:stun1.l.google.com:19302"},
         ]
       });
 
-      this.pc.onIceConnectionState = (state) {
+      pc.onIceConnectionState = (state) {
         if (state == RTCPeerConnectionState.RTCPeerConnectionStateConnected) {
           //debugPrint("XCloudClient peerConnection state: connected");
           onConnectionState?.call(state);
@@ -67,17 +67,17 @@ class XCloudClient {
       await createChannels();
       gatherIce();
 
-      this.transceiver = await this.pc.addTransceiver(
+      transceiver = await pc.addTransceiver(
           kind: RTCRtpMediaType.RTCRtpMediaTypeVideo,
           init:
               RTCRtpTransceiverInit(direction: TransceiverDirection.RecvOnly));
 
-        await this.pc.addTransceiver(
+        await pc.addTransceiver(
           kind: RTCRtpMediaType.RTCRtpMediaTypeAudio,
           init:
           RTCRtpTransceiverInit(direction: TransceiverDirection.SendRecv));
       //StatsReport
-      this.pc.onAddStream = (stream) async {
+      pc.onAddStream = (stream) async {
         var stats = await transceiver.receiver.getStats();
         // if (stats[0].timestamp / 1000 <
         //     DateTime(2023, 9, 11).millisecondsSinceEpoch) {
@@ -98,13 +98,13 @@ class XCloudClient {
         'OfferToReceiveVideo': true,
       }
     };
-    var offer = await this.pc.createOffer(constraints);
-    this.pc.setLocalDescription(offer);
+    var offer = await pc.createOffer(constraints);
+    pc.setLocalDescription(offer);
     return offer;
   }
 
   void setRemoteOffer(String sdp) {
-    this.pc.setRemoteDescription(RTCSessionDescription(sdp, "answer"));
+    pc.setRemoteDescription(RTCSessionDescription(sdp, "answer"));
   }
 
   Future createChannels() async {
@@ -145,9 +145,9 @@ class XCloudClient {
   }
 
   void gatherIce() {
-    this.pc.onIceCandidate = (candidate) {
+    pc.onIceCandidate = (candidate) {
       if (candidate.candidate != null && candidate.candidate!.isNotEmpty) {
-        this.iceCandidates.add(candidate);
+        iceCandidates.add(candidate);
         debugPrint("add ice");
       }
     };
@@ -176,6 +176,6 @@ class XCloudClient {
       channel.onClose();
     }
 
-    this.pc.close();
+    pc.close();
   }
 }

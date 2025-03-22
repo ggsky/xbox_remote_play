@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'channel_base.dart';
 import '../xbox/x_cloud_client.dart';
 
@@ -26,12 +25,12 @@ class ControlChannel extends ChannelBase {
       'wasAdded': true,
     });
 
-    this.sendMessage(authRequest);
-    this.sendMessage(gamepadRequest);
+    sendMessage(authRequest);
+    sendMessage(gamepadRequest);
 
     Future(() async {
       while (true){
-      this.sendMessage(keyframeRequest);
+      sendMessage(keyframeRequest);
       await Future.delayed(const Duration(milliseconds: 3000));
       }
 
@@ -40,7 +39,7 @@ class ControlChannel extends ChannelBase {
 
   @override
   void onClose() {
-    this.isRunning = false;
+    isRunning = false;
     super.onClose();
   }
 }

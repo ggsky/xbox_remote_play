@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
     }
 
     var tokensPath =
-        "${workingDirectory}\\auth\\user_${Config.UserIndex}\\tokens.json";
+        "$workingDirectory\\auth\\user_${Config.UserIndex}\\tokens.json";
 
     await WidgetsBinding.instance.waitUntilFirstFrameRasterized;
     try {
@@ -171,32 +171,32 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
       }
 
       var userDir =
-          Directory("${workingDirectory}\\auth\\user_${Config.UserIndex}\\");
+          Directory("$workingDirectory\\auth\\user_${Config.UserIndex}\\");
       if (!await userDir.exists()) {
         await userDir.create(recursive: true);
       }
       var authExePath = File(
-          "${workingDirectory}\\auth\\user_${Config.UserIndex}\\auth-webview.exe");
+          "$workingDirectory\\auth\\user_${Config.UserIndex}\\auth-webview.exe");
       if (!await authExePath.exists()) {
         var localAuthExePath =
-            File("${workingDirectory}\\auth\\auth-webview.exe");
+            File("$workingDirectory\\auth\\auth-webview.exe");
         var localCryptoLibPath =
-            File("${workingDirectory}\\auth\\libcrypto-3-x64.dll");
+            File("$workingDirectory\\auth\\libcrypto-3-x64.dll");
         var localSSlLibPath =
-            File("${workingDirectory}\\auth\\libssl-3-x64.dll");
+            File("$workingDirectory\\auth\\libssl-3-x64.dll");
         await localAuthExePath.copy(
-            "${workingDirectory}\\auth\\user_${Config.UserIndex}\\auth-webview.exe");
+            "$workingDirectory\\auth\\user_${Config.UserIndex}\\auth-webview.exe");
         await localCryptoLibPath.copy(
-            "${workingDirectory}\\auth\\user_${Config.UserIndex}\\libcrypto-3-x64.dll");
+            "$workingDirectory\\auth\\user_${Config.UserIndex}\\libcrypto-3-x64.dll");
         await localSSlLibPath.copy(
-            "${workingDirectory}\\auth\\user_${Config.UserIndex}\\libssl-3-x64.dll");
+            "$workingDirectory\\auth\\user_${Config.UserIndex}\\libssl-3-x64.dll");
       }
 
       var result = Process.runSync(
-          "${workingDirectory}\\auth\\user_${Config.UserIndex}\\auth-webview.exe",
-          ["tokens_file_path=${tokensPath}"],
+          "$workingDirectory\\auth\\user_${Config.UserIndex}\\auth-webview.exe",
+          ["tokens_file_path=$tokensPath"],
           workingDirectory:
-              "${workingDirectory}\\auth\\user_${Config.UserIndex}");
+              "$workingDirectory\\auth\\user_${Config.UserIndex}");
 
       if (result.exitCode == 0) {
         var tokenFile = File(tokensPath);
@@ -256,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
       };
 
       xCloudClient.onConnectionState = (state) async {
-        debugPrint("onConnectionState: ${state}");
+        debugPrint("onConnectionState: $state");
         if (state == RTCIceConnectionState.RTCIceConnectionStateConnected) {
           isConnected = true;
         } else if (state ==
@@ -268,7 +268,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
               builder: (context) {
                 return AlertDialog(
                     title: const Text("异常"),
-                    content: Text("串流关闭: ${state}!"),
+                    content: Text("串流关闭: $state!"),
                     actions: <Widget>[
                       TextButton(
                           onPressed: () {

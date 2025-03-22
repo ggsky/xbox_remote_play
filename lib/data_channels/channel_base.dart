@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -32,12 +31,12 @@ class ChannelBase {
   }
 
   Future<void> sendMessage(String message) async{
-    var dc = this.client.getRemoteChannel(this.clientName);
+    var dc = client.getRemoteChannel(clientName);
     await dc?.send(RTCDataChannelMessage(message));
   }
 
   Future<void> sendData(Uint8List data) async{
-    var dc = this.client.getRemoteChannel(this.clientName);
+    var dc = client.getRemoteChannel(clientName);
     await dc?.send(RTCDataChannelMessage.fromBinary(data));
   }
 }
