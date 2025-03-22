@@ -27,49 +27,49 @@ class InputFrame {
   void Touch(InputKey key, bool state) {
     switch (key) {
       case InputKey.nexus:
-        this.nexus = state;
+        nexus = state;
         break;
       case InputKey.menu:
-        this.menu = state;
+        menu = state;
         break;
       case InputKey.view:
-        this.view = state;
+        view = state;
         break;
       case InputKey.a:
-        this.a = state;
+        a = state;
         break;
       case InputKey.b:
-        this.b = state;
+        b = state;
         break;
       case InputKey.x:
-        this.x = state;
+        x = state;
         break;
       case InputKey.y:
-        this.y = state;
+        y = state;
         break;
       case InputKey.dpadLeft:
-        this.dPadLeft = state;
+        dPadLeft = state;
         break;
       case InputKey.dpadUp:
-        this.dPadUp = state;
+        dPadUp = state;
         break;
       case InputKey.dpadRight:
-        this.dPadRight = state;
+        dPadRight = state;
         break;
       case InputKey.dpadDown:
-        this.dPadDown = state;
+        dPadDown = state;
         break;
       case InputKey.leftShoulder:
-        this.leftShoulder = state;
+        leftShoulder = state;
         break;
       case InputKey.rightShoulder:
-        this.rightShoulder = state;
+        rightShoulder = state;
         break;
       case InputKey.leftThumb:
-        this.leftThumb = state;
+        leftThumb = state;
         break;
       case InputKey.rightThumb:
-        this.rightThumb = state;
+        rightThumb = state;
         break;
       default:
         break;
@@ -80,79 +80,79 @@ class InputFrame {
     var duration = Duration(milliseconds: milliseconds ?? 50);
     switch (key) {
       case InputKey.nexus:
-        this.nexus = true;
+        nexus = true;
         await Future.delayed(duration);
-        this.nexus = false;
+        nexus = false;
         break;
       case InputKey.menu:
-        this.menu = true;
+        menu = true;
         await Future.delayed(duration);
-        this.menu = false;
+        menu = false;
         break;
       case InputKey.view:
-        this.view = true;
+        view = true;
         await Future.delayed(duration);
-        this.view = false;
+        view = false;
         break;
       case InputKey.a:
-        this.a = true;
+        a = true;
         await Future.delayed(duration);
-        this.a = false;
+        a = false;
         break;
       case InputKey.b:
-        this.b = true;
+        b = true;
         await Future.delayed(duration);
-        this.b = false;
+        b = false;
         break;
       case InputKey.x:
-        this.x = true;
+        x = true;
         await Future.delayed(duration);
-        this.x = false;
+        x = false;
         break;
       case InputKey.y:
-        this.y = true;
+        y = true;
         await Future.delayed(duration);
-        this.y = false;
+        y = false;
         break;
       case InputKey.dpadLeft:
-        this.dPadLeft = true;
+        dPadLeft = true;
         await Future.delayed(duration);
-        this.dPadLeft = false;
+        dPadLeft = false;
         break;
       case InputKey.dpadUp:
-        this.dPadUp = true;
+        dPadUp = true;
         await Future.delayed(duration);
-        this.dPadUp = false;
+        dPadUp = false;
         break;
       case InputKey.dpadRight:
-        this.dPadRight = true;
+        dPadRight = true;
         await Future.delayed(duration);
-        this.dPadRight = false;
+        dPadRight = false;
         break;
       case InputKey.dpadDown:
-        this.dPadDown = true;
+        dPadDown = true;
         await Future.delayed(duration);
-        this.dPadDown = false;
+        dPadDown = false;
         break;
       case InputKey.leftShoulder:
-        this.leftShoulder = true;
+        leftShoulder = true;
         await Future.delayed(duration);
-        this.leftShoulder = false;
+        leftShoulder = false;
         break;
       case InputKey.rightShoulder:
-        this.rightShoulder = true;
+        rightShoulder = true;
         await Future.delayed(duration);
-        this.rightShoulder = false;
+        rightShoulder = false;
         break;
       case InputKey.leftThumb:
-        this.leftThumb = true;
+        leftThumb = true;
         await Future.delayed(duration);
-        this.leftThumb = false;
+        leftThumb = false;
         break;
       case InputKey.rightThumb:
-        this.rightThumb = true;
+        rightThumb = true;
         await Future.delayed(duration);
-        this.rightThumb = false;
+        rightThumb = false;
         break;
       default:
         break;
@@ -162,22 +162,22 @@ class InputFrame {
   void SetAxis(InputKey key, int value) {
     switch (key) {
       case InputKey.leftStickXAxis:
-        this.leftStickXAxis = value;
+        leftStickXAxis = value;
         break;
       case InputKey.leftStickYAxis:
-        this.leftStickYAxis = value;
+        leftStickYAxis = value;
         break;
       case InputKey.rightStickXAxis:
-        this.rightStickXAxis = value;
+        rightStickXAxis = value;
         break;
       case InputKey.rightStickYAxis:
-        this.rightStickYAxis = value;
+        rightStickYAxis = value;
         break;
       case InputKey.leftTrigger:
-        this.leftTrigger = value;
+        leftTrigger = value;
         break;
       case InputKey.rightTrigger:
-        this.rightTrigger = value;
+        rightTrigger = value;
         break;
       default:
         break;
@@ -185,27 +185,27 @@ class InputFrame {
   }
 
   bool Equals(InputFrame value) {
-    if (this.a != value.a ||
-        this.b != value.b ||
-        this.x != value.x ||
-        this.y != value.y ||
-        this.leftStickXAxis != value.leftStickXAxis ||
-        this.leftStickYAxis != value.leftStickYAxis ||
-        this.rightStickXAxis != value.rightStickXAxis ||
-        this.rightStickYAxis != value.rightStickYAxis ||
-        this.leftThumb != value.leftThumb ||
-        this.rightThumb != value.rightThumb ||
-        this.dPadLeft != value.dPadLeft ||
-        this.dPadUp != value.dPadUp ||
-        this.dPadRight != value.dPadRight ||
-        this.dPadDown != value.dPadDown ||
-        this.leftTrigger != value.leftTrigger ||
-        this.rightTrigger != value.rightTrigger ||
-        this.leftShoulder != value.leftShoulder ||
-        this.rightShoulder != value.rightShoulder ||
-        this.nexus != value.nexus ||
-        this.menu != value.menu ||
-        this.view != value.view) {
+    if (a != value.a ||
+        b != value.b ||
+        x != value.x ||
+        y != value.y ||
+        leftStickXAxis != value.leftStickXAxis ||
+        leftStickYAxis != value.leftStickYAxis ||
+        rightStickXAxis != value.rightStickXAxis ||
+        rightStickYAxis != value.rightStickYAxis ||
+        leftThumb != value.leftThumb ||
+        rightThumb != value.rightThumb ||
+        dPadLeft != value.dPadLeft ||
+        dPadUp != value.dPadUp ||
+        dPadRight != value.dPadRight ||
+        dPadDown != value.dPadDown ||
+        leftTrigger != value.leftTrigger ||
+        rightTrigger != value.rightTrigger ||
+        leftShoulder != value.leftShoulder ||
+        rightShoulder != value.rightShoulder ||
+        nexus != value.nexus ||
+        menu != value.menu ||
+        view != value.view) {
       return false;
     }
     return true;
@@ -213,27 +213,27 @@ class InputFrame {
 
   InputFrame DeepCopy() {
     var value = new InputFrame();
-    value.a = this.a;
-    value.b = this.b;
-    value.x = this.x;
-    value.y = this.y;
-    value.leftStickXAxis = this.leftStickXAxis;
-    value.leftStickYAxis = this.leftStickYAxis;
-    value.rightStickXAxis = this.rightStickXAxis;
-    value.rightStickYAxis = this.rightStickYAxis;
-    value.leftThumb = this.leftThumb;
-    value.rightThumb = this.rightThumb;
-    value.dPadLeft = this.dPadLeft;
-    value.dPadUp = this.dPadUp;
-    value.dPadRight = this.dPadRight;
-    value.dPadDown = this.dPadDown;
-    value.leftTrigger = this.leftTrigger;
-    value.rightTrigger = this.rightTrigger;
-    value.leftShoulder = this.leftShoulder;
-    value.rightShoulder = this.rightShoulder;
-    value.nexus = this.nexus;
-    value.menu = this.menu;
-    value.view = this.view;
+    value.a = a;
+    value.b = b;
+    value.x = x;
+    value.y = y;
+    value.leftStickXAxis = leftStickXAxis;
+    value.leftStickYAxis = leftStickYAxis;
+    value.rightStickXAxis = rightStickXAxis;
+    value.rightStickYAxis = rightStickYAxis;
+    value.leftThumb = leftThumb;
+    value.rightThumb = rightThumb;
+    value.dPadLeft = dPadLeft;
+    value.dPadUp = dPadUp;
+    value.dPadRight = dPadRight;
+    value.dPadDown = dPadDown;
+    value.leftTrigger = leftTrigger;
+    value.rightTrigger = rightTrigger;
+    value.leftShoulder = leftShoulder;
+    value.rightShoulder = rightShoulder;
+    value.nexus = nexus;
+    value.menu = menu;
+    value.view = view;
     return value;
   }
 }

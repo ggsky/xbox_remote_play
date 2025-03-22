@@ -107,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
     windowManager.addListener(this);
     videoRenderer.initialize();
     videoRenderer.onFirstFrameRendered = () {
-      this.setState(() => firstFrameRenderered = true);
+      setState(() => firstFrameRenderered = true);
     };
     initialize();
   }
@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
 
   @override
   void onWindowClose() {
-    this.xCloudClient.close();
+    xCloudClient.close();
     super.onWindowClose();
   }
 
@@ -132,15 +132,15 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
           context: context,
           builder: (context) {
             return AlertDialog(
-                title: Text("异常"),
-                content: Text("认证失败, 程序退出!"),
+                title: const Text("异常"),
+                content: const Text("认证失败, 程序退出!"),
                 actions: <Widget>[
                   TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                         exit(0);
                       },
-                      child: Text("确认"))
+                      child: const Text("确认"))
                 ]);
           });
     }
@@ -213,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
           context: context,
           builder: (context) {
             return AlertDialog(
-                title: Text("异常"),
+                title: const Text("异常"),
                 content: Text(ex.toString()),
                 actions: <Widget>[
                   TextButton(
@@ -221,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
                         Navigator.pop(context);
                         exit(0);
                       },
-                      child: Text("确认"))
+                      child: const Text("确认"))
                 ]);
           });
     }
@@ -249,25 +249,25 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
 
   void startStreaming() async {
     try {
-      this.xCloundApi = XCloundApi(this.userToken, this.wlToken);
-      await this.xCloudClient.initialize();
-      this.xCloudClient.onAddStream = (stream) {
-        this.videoRenderer.srcObject = stream;
+      xCloundApi = XCloundApi(userToken, wlToken);
+      await xCloudClient.initialize();
+      xCloudClient.onAddStream = (stream) {
+        videoRenderer.srcObject = stream;
       };
 
-      this.xCloudClient.onConnectionState = (state) async {
+      xCloudClient.onConnectionState = (state) async {
         debugPrint("onConnectionState: ${state}");
         if (state == RTCIceConnectionState.RTCIceConnectionStateConnected) {
           isConnected = true;
         } else if (state ==
             RTCIceConnectionState.RTCIceConnectionStateDisconnected ||
             state == RTCIceConnectionState.RTCIceConnectionStateClosed) {
-          this.isConnected = false;
+          isConnected = false;
           await showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                    title: Text("异常"),
+                    title: const Text("异常"),
                     content: Text("串流关闭: ${state}!"),
                     actions: <Widget>[
                       TextButton(
@@ -276,40 +276,40 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
                             xCloudClient.close();
                             exit(0);
                           },
-                          child: Text("确认"))
+                          child: const Text("确认"))
                     ]);
               });
         }
       };
 
-      var devices = await this.xCloundApi.getDevices();
+      var devices = await xCloundApi.getDevices();
 
       if (devices == null || devices!.length == 0) {
         await showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
-                  title: Text("异常"),
-                  content: Text("设备列表为空, 请检查后重试, 程序退出!"),
+                  title: const Text("异常"),
+                  content: const Text("设备列表为空, 请检查后重试, 程序退出!"),
                   actions: <Widget>[
                     TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                           exit(0);
                         },
-                        child: Text("确认"))
+                        child: const Text("确认"))
                   ]);
             });
       } else {
-        this.setState(() => this.hintText = "发起会话");
+        setState(() => hintText = "发起会话");
         var sessionState =
-            await this.xCloundApi.startSession(devices[0]["serverId"]);
+            await xCloundApi.startSession(devices[0]["serverId"]);
         if (sessionState == null || sessionState["state"] != "Provisioned") {
           await showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                    title: Text("异常"),
+                    title: const Text("异常"),
                     content: Text(
                         "会话失败: ${(sessionState != null ? json.encode(sessionState) : "error")}!"),
                     actions: <Widget>[
@@ -318,25 +318,25 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
                             Navigator.pop(context);
                             exit(0);
                           },
-                          child: Text("确认"))
+                          child: const Text("确认"))
                     ]);
               });
         } else {
-          this.setState(() => this.hintText = "第一次握手");
-          var offer = await this.xCloudClient.createOffer();
-          var sendSdpResponse = await this.xCloundApi.sendSdp(offer.sdp!);
+          setState(() => hintText = "第一次握手");
+          var offer = await xCloudClient.createOffer();
+          var sendSdpResponse = await xCloundApi.sendSdp(offer.sdp!);
           if (sendSdpResponse["status"] == "success") {
-            this.setState(() => this.hintText = "第二次握手");
-            this.xCloudClient.setRemoteOffer(sendSdpResponse["sdp"]);
-            var iceCandidates = this.xCloudClient.iceCandidates;
+            setState(() => hintText = "第二次握手");
+            xCloudClient.setRemoteOffer(sendSdpResponse["sdp"]);
+            var iceCandidates = xCloudClient.iceCandidates;
             List<dynamic> iceList = [];
             for (var candidate in iceCandidates) {
               iceList.add(candidate.toMap());
             }
             var icce = json.encode(iceList);
-            var sendIceResponse = await this.xCloundApi.sendIce(icce);
+            var sendIceResponse = await xCloundApi.sendIce(icce);
             if (sendIceResponse != null) {
-              this.setState(() => this.hintText = "第三次握手");
+              setState(() => hintText = "第三次握手");
               for (var candidate in sendIceResponse) {
                 if (candidate["candidate"] != "a=end-of-candidates") {
                   // await showDialog(
@@ -354,21 +354,21 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
                   //           ]);
                   //     });
 
-                  await this.xCloudClient.pc.addCandidate(RTCIceCandidate(
+                  await xCloudClient.pc.addCandidate(RTCIceCandidate(
                       candidate["candidate"],
                       candidate["sdpMid"],
                       int.parse(candidate["sdpMLineIndex"]!)));
                 }
               }
-              this.inputChannel =
-                  this.xCloudClient.getLocalChannel("input") as InputChannel;
-              this.setState(() => this.hintText = "握手成功");
+              inputChannel =
+                  xCloudClient.getLocalChannel("input") as InputChannel;
+              setState(() => hintText = "握手成功");
 
               Future(() async {
                 while (true) {
-                  this.xCloundApi.KeepAlive();
+                  xCloundApi.KeepAlive();
                   await Future.delayed(const Duration(milliseconds: 30000));
-                  return this.isConnected;
+                  return isConnected;
                 }
               });
             }
@@ -392,7 +392,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
             if (data.keyCode == Keycode.f12) {
               windowManager.close();
             } else {
-              this.inputChannel.onKey(data.keyCode, event is RawKeyDownEvent);
+              inputChannel.onKey(data.keyCode, event is RawKeyDownEvent);
             }
           }
         },
@@ -402,42 +402,10 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
               margin: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: RTCVideoView(videoRenderer, filterQuality: Config.Quality),
               decoration: const BoxDecoration(color: Colors.black87),
+              child: RTCVideoView(videoRenderer, filterQuality: Config.Quality),
             ),
           ),
-          // Center(
-          //   child: Visibility(
-          //     visible: !firstFrameRenderered,
-          //     child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.end,
-          //       children: [
-          //         const SizedBox(
-          //           width: 36,
-          //           height: 36,
-          //           child: const CircularProgressIndicator(
-          //             strokeWidth: 6,
-          //             color: Colors.white70,
-          //           ),
-          //         ),
-          //         SizedBox(
-          //           child: SizedBox(
-          //             child: SizedBox(
-          //               child: Container(
-          //                 margin: const EdgeInsets.fromLTRB(0, 25, 0, 25),
-          //                 child: Text(hintText,
-          //                     style: const TextStyle(
-          //                       fontSize: 16,
-          //                       color: Colors.white70,
-          //                     )),
-          //               ),
-          //             ),
-          //           ),
-          //         )
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ]),
       ),
     );
