@@ -1,7 +1,7 @@
 import "dart:convert";
 import "dart:io";
 import "package:flutter_webrtc/flutter_webrtc.dart";
-import "package:xbox_remote_play/Config.dart";
+import 'package:xbox_remote_play/config.dart';
 import "package:xbox_remote_play/data_channels/control_channel.dart";
 import "channel_base.dart";
 import "../xbox/x_cloud_client.dart";

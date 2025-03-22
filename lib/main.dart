@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:flutter/services.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:xbox_remote_play/Config.dart';
+import 'package:xbox_remote_play/config.dart';
 import 'package:xbox_remote_play/data_channels/input_channel.dart';
 import 'package:xbox_remote_play/key_code.dart';
 
