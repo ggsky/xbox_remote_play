@@ -326,20 +326,6 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
               setState(() => hintText = "第三次握手");
               for (var candidate in sendIceResponse) {
                 if (candidate["candidate"] != "a=end-of-candidates") {
-                  // await showDialog(
-                  //     context: context,
-                  //     builder: (context) {
-                  //       return AlertDialog(
-                  //           title: Text("Ip地址"),
-                  //           content: Text(candidate["candidate"]),
-                  //           actions: <Widget>[
-                  //             TextButton(
-                  //                 onPressed: () {
-                  //                   Navigator.pop(context);
-                  //                 },
-                  //                 child: Text("确认"))
-                  //           ]);
-                  //     });
 
                   await xCloudClient.pc.addCandidate(RTCIceCandidate(
                       candidate["candidate"],
