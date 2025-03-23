@@ -17,7 +17,7 @@ void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
 
-  if (args.length > 0) {
+  if (args.isNotEmpty) {
     var _args = args.join(' ').split('--');
     for (var arg in _args) {
       //debugPrint(arg);
@@ -45,19 +45,6 @@ void main(List<String> args) async {
     }
   }
 
-  // WindowOptions windowOptions = WindowOptions(
-  //   size: Size(Config.Width, Config.Height),
-  //   center: true,
-  //   title: Config.UserIndex != 999 ? "窗口_${Config.UserIndex}" : "xbox远程游玩",
-  //   backgroundColor: Colors.transparent,
-  //   skipTaskbar: false,
-  //   titleBarStyle: TitleBarStyle.normal,
-  // );
-  //
-  // windowManager.waitUntilReadyToShow(windowOptions, () async {
-  //   await windowManager.show();
-  //   await windowManager.focus();
-  // });
   runApp(MyApp());
 }
 
